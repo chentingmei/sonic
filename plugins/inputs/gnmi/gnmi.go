@@ -501,6 +501,12 @@ func (c *GNMI) Gather(_ telegraf.Accumulator) error {
 	return nil
 }
 
+func (c *GNMI) Description() string {
+
+	return "For SONiC gNMI"
+
+}
+
 func New() telegraf.Input {
 	return &GNMI{
 		Encoding: "proto",
