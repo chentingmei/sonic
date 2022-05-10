@@ -508,7 +508,7 @@ func (c *GNMI) Description() string {
 }
 
 func (c *GNMI) SampleConfig() string {
-	return sampleconfig 
+	return sampleConfig 
 }
 
 func New() telegraf.Input {
@@ -523,4 +523,65 @@ func init() {
 	// Backwards compatible alias:
 	inputs.Add("cisco_telemetry_gnmi", New)
 }
+
+const sampleConfig =  `
+
+[[inputs.gnmi]]
+#  ## Address and port of the gNMI GRPC server
+  addresses = ["10.101.118.12:8080", "10.101.118.11:8080"]
+#
+#  ## define credentials
+#  username = "cisco"
+#  password = "cisco"
+#
+#  ## gNMI encoding requested (one of: "proto", "json", "json_ietf", "bytes")
+  encoding = "json_ietf"
+#
+#  ## redial in case of failures after
+  redial = "10s"
+#
+#  ## enable client-side TLS and define CA to authenticate the device
+  enable_tls = false
+#  # tls_ca = "/etc/telegraf/ca.pem"
+  insecure_skip_verify = true
+#
+#  ## define client-side TLS certificate & key to authenticate to the device
+#  # tls_cert = "/etc/telegraf/cert.pem"
+#  # tls_key = "/etc/telegraf/key.pem"
+#
+#  ## gNMI subscription prefix (optional, can usually be left empty)
+#  ## See: https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md#222-paths
+#  # origin = ""
+  prefix = ""
+  target = "STATE_DB"
+#
+#  ## Define additional aliases to map telemetry encoding paths to simple measurement names
+#  #[inputs.gnmi.aliases]
+#  #  ifcounters = "openconfig:/interfaces/interface/state/counters"
+#
+  [[inputs.gnmi.subscription]]
+#   ## Name of the measurement that will be emitted
+   name = "Counter"
+#
+#   ## Origin and path of the subscription
+   ## See: https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md#222-paths
+#   ##
+#   ## origin usually refers to a (YANG) data model implemented by the device
+#   ## and path to a specific substructure inside it that should be subscribed to (similar to an XPath)
+#   ## YANG models can be found e.g. here: https://github.com/YangModels/yang/tree/master/vendor/cisco/xr
+    #origin = "openconfig-interfaces:interfaces"
+    path = "/TEMPERATURE_INFO|Temp sensor 3/temperature"
+#
+#   # Subscription mode (one of: "target_defined", "sample", "on_change") and interval
+    subscription_mode = "sample"
+    sample_interval = "1s"
+#
+#   ## Suppress redundant transmissions when measured values are unchanged
+#   # suppress_redundant = false
+#
+#   ## If suppression is enabled, send updates at least every X seconds anyway
+#   # heartbeat_interval = "60s"
+
+`
+
 
