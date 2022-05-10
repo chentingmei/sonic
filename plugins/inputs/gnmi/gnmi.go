@@ -508,7 +508,7 @@ func (c *GNMI) Description() string {
 }
 
 func (c *GNMI) SampleConfig() string {
-	return `{{ .SampleConfig }}`
+	return sampleconfig 
 }
 
 func New() telegraf.Input {
