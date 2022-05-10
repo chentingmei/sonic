@@ -507,9 +507,6 @@ func (c *GNMI) Description() string {
 
 }
 
-func (c *GNMI) SampleConfig() string {
-	return sampleConfig 
-}
 
 func New() telegraf.Input {
 	return &GNMI{
@@ -585,3 +582,6 @@ const sampleConfig =  `
 `
 
 
+func (c *GNMI) SampleConfig() string {
+	return sampleConfig 
+}
